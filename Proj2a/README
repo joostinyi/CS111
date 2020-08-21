@@ -1,0 +1,101 @@
+NAME: Justin Yi
+EMAIL: joostinyi00@gmail.com
+ID: 905123893
+
+lab2_add.c: source file for the maintainence of a concurrent counter. 
+Supports threads, iterations, yield, and sync options.
+
+lab2_list.c: source file for maintainence of a doubly circular linked list.
+Supports threads, iterations, yield, and sync options
+
+SortedList.c: source file containing implementation of prototypes in SortedList.h
+
+SortedList.h: provided linked list interface
+
+Makefile: Makefile with deliverable targets build, tests, graphs, dist, clean
+
+lab2_add.csv: results from part 1 tests
+
+lab2_list.csv: results from part 2 tests
+
+lab2_add-1.png: threads iteations to generate failure (w/ & w/o yields)
+
+lab2_add-2.png: average time per op w/ and w/o yields
+
+lab2_add-3.png: average time per (single threaded) op v. number of iterations
+
+lab2_add-4.png: threads and iterations that run successfully w/ yields w/ each sync option
+
+lab2_add-5.png: average time per (protected) operation v. number of threads
+
+
+lab2_list-1.png: avearge time per single threaded unprotected op v number of iterations
+
+lab2_list-2.png: threads and iterations required to generate a failure
+
+lab2_list-3.png: iterations that can run (protected) without failure
+
+lab2_list-4.png: length-adjusted cost per op v. number of threads for each sync option
+
+
+add_tests.sh: test script for executing add tests
+
+list_tests.sh: test script for executing list tests
+
+lab2_add.gp: gnuplot data reduction scripts for add data
+
+lab2_list.gp: gnuplot data reduction scripts for list data
+
+https://computing.llnl.gov/tutorials/pthreads/#Joining for guide on pthreads
+https://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html bash programming
+https://linuxacademy.com/blog/linux/conditions-in-bash-scripting-if-statements/ bash programming
+Lock implementations and MONOTONIC clock use were adapted from the discussion
+
+QUESTION
+    2.1.1 - causing conflicts:
+        The conflicts are not guaranteed – the overlapping of
+        concurrent threads must align in a way to produce erroneous results,
+        which may or may not happen, depending on the manner in which they overlap.
+        Given this probability, many iterations correlate to a larger overhead (more chance of overlap)
+        which implies a greater chance of error, and smaller number of iterations are unlikely to fail.
+
+    2.1.2 - cost of yielding:
+        The --yield runs are slower because they incur an extra overhead of switching to OS mode to
+        make a system call to yield. Additional time is used to ensure proper saving of registers/stack/heap
+        when context switching. Not possible to get valid timings due to the extra cost of the
+        sys call to yield included in the time calculation.
+    
+    2.1.3 - measurement errors:
+        Average cost per iteration drops with increasing iteration count due to the initial ovehead
+        cost of the initialization of the thread itself – as more iterations are allocated to a 
+        particular thread (at a relatively low cost compared to overhead), average cost decreases.
+        Can determine the "correct" cost by observing when the cost seems to grow with iterations
+        at a constant rate.
+    
+    2.1.4 - costs of serialization
+        All options perform similarly for low numbers of threads because the initial overhead
+        of the setting up of threads far surpasses that of any potential optimization by selecting
+        a particular locking mechanism. The operations slow down due to increased contention, which would
+        increase the likelihood that more threads are waiting longer for the lock to be released – 
+        resulting in a greater time per operation.
+
+    2.2.1 - scalability of Mutex
+        Time per mutex-protected operation exhibits a direct relationship with
+        the number of threads, due to greater contention for locks. The graphs
+        seem to be somewhat logarithmic, I believe this has to do with the
+        greater initial cost of setting up the threads compared to that of
+        handling the locks themselves, however as thread number increases, I
+        expect the rate to increase again. The time seems to increase at a greater
+        rate for the list operations, since there are three separate protected subroutines
+        that contend for the lock as opposed to just the one in the add case.
+
+    2.2.2 - scalability of spin locks
+        The spin locks seem to have a greater time per operation relative to the
+        mutex lock – this may be because the spin lock, when waiting for the
+        lock for operation, spins on the CPU, thus wasting cycles. The mutex
+        also incurs a relatively large cost in the sys call of sleeping and waking threads, though
+        it does spin for a portion of time. The curves are similar to those discussed in (2.2.1) 
+        again having to do with the overhead of initialization of the threads themselves. 
+        The spin locks seem to be less scalable for larger numbers of threads, as contention
+        would cause many threads to spin and waste cycles, whereas the mutex will limit the
+        wasted cycles by sleeping and subsequently waking when the lock is released.

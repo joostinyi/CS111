@@ -1,0 +1,13 @@
+NAME: Justin Yi
+EMAIL: joostinyi00@gmail.com
+ID: 905123893
+
+lab3a.c - source file containing implementation of the file system check program
+          supports a single file system image argument
+
+ext2_fs.h - provided header of file system data structures
+
+Makefile - with targets build, dist, and clean
+
+Much of the implementation was sourced from the discussion slides and
+    http://cs.smith.edu/~nhowe/Teaching/csc262/oldlabs/ext2.html#itable

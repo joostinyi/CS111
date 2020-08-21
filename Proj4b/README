@@ -1,0 +1,16 @@
+NAME: Justin Yi
+EMAIL: joostinyi00@gmail.com
+ID: 905123893
+
+lab4b.c: source file for program to support reporting of time and temperature
+         scale changes, logging to file and interval of sampling
+
+Makefile: Makefile with targets program build, smoke test check, distribution, and clean
+
+compile.sh: compilation script that supports alternative compilation for non beaglebone machines
+
+check.sh: script containing basic functionality smoke tests for program
+
+https://stackoverflow.com/questions/5193570/value-lookup-table-in-c-by-strings
+https://www.educative.io/edpresso/splitting-a-string-using-strtok-in-c
+

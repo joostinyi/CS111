@@ -1,0 +1,13 @@
+NAME: Justin Yi
+EMAIL: joostinyi00@gmail.com
+ID: 905123893
+
+Makefile for targets default, clean, dist
+
+lab1a.c source file for Terminal I/O and Inter-Process Communication
+
+Used the atexit(3) command to restore the terminal mode upon normal exit
+I had some difficulty processing error signal from the pipe and poll commands – 
+I went through multiple times to make sure that all write pipe ends were closed by each process 
+In the end one of the more frustrating things that I overlooked was accounting for hold ups in both
+directions, which is now included.

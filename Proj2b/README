@@ -1,0 +1,83 @@
+NAME: Justin Yi
+EMAIL: joostinyi00@gmail.com
+ID: 905123893
+
+lab2_list.c: source file for maintainence of a doubly circular multi linked list.
+Supports threads, iterations, yield, and sync options
+
+SortedList.c: source file containing implementation of prototypes in SortedList.h
+
+SortedList.h: provided linked list interface
+
+Makefile: Makefile with deliverable targets build, tests, graphs, dist, clean, profile
+
+lab2b_list.csv: results from list tests
+
+lab2b_1.png ... throughput vs. number of threads for mutex and spin-lock synchronized list operations.
+
+lab2b_2.png ... mean time per mutex wait and mean time per operation for mutex-synchronized list operations.
+
+lab2b_3.png ... successful iterations vs. threads for each synchronization method.
+
+lab2b_4.png ... throughput vs. number of threads for mutex synchronized partitioned lists.
+
+lab2b_5.png ... throughput vs. number of threads for spin-lock-synchronized partitioned lists.
+
+list_tests.sh: test script for executing list tests
+
+lab2_list.gp: gnuplot data reduction scripts for list data
+
+https://computing.llnl.gov/tutorials/pthreads/#Joining for guide on pthreads
+https://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html bash programming
+https://linuxacademy.com/blog/linux/conditions-in-bash-scripting-if-statements/ bash programming
+Lock implementations and MONOTONIC clock use were adapted from the discussion
+
+QUESTION 2.3.1 - CPU time in the basic list implementation:
+    Where do you believe most of the CPU time is spent in the 1 and 2-thread list tests ?
+        Most of the CPU time is spent in the actual implementation of the list insertions, lookups, length, and
+        deletion computation, as there is not much contention for locks, if any. Possibly within
+        costly system calls as well (maybe in init of threads).
+    Why do you believe these to be the most expensive parts of the code?
+        The contention for locks for list operations is not very high, so the computation is
+        not used for context switching, but just the operations themselves
+    Where do you believe most of the CPU time is being spent in the high-thread spin-lock tests?
+        Most of the CPU time is being used in the management of locks – including the spin waiting for
+        the locks themselves, because of higher contention for locks.
+    Where do you believe most of the CPU time is being spent in the high-thread mutex tests?
+        Most is being used in both the spin waits for locks and the sys calls to sleep and wake
+        mutexes.
+QUESTION 2.3.2 - Execution Profiling:
+    Where (what lines of code) are consuming most of the CPU time when the spin-lock version of the list exerciser is run with a large number of threads?
+        The while loop (while(__sync_lock_test_and_set(&spinlock))) of the thread attempting to acquire the spin lock consumes the most CPU time.
+    Why does this operation become so expensive with large numbers of threads?
+        Higher contention for a fixed set of locks implies a larger wait time for threads trying to
+        acquire locks, this will cause threads to spin on this while loop for much longer.
+
+QUESTION 2.3.3 - Mutex Wait Time:
+    Look at the average time per operation (vs. # threads) and the average wait-for-mutex time (vs. #threads).
+    Why does the average lock-wait time rise so dramatically with the number of contending threads?
+        A larger number of threads leads to a rise in contention, the time that each thread spends waiting
+        for a lock increases as a function of the number of threads. This may even be enough to
+        cause the threads to sleep and await awakening.
+    Why does the completion time per operation rise (less dramatically) with the number of contending threads?
+        Completion time rises less dramatically because while there is more contention for locks,
+        The overall completion time per operation is within the scope of the program as a whole,
+        so the time spent acquiring locks is a bit less impactful.
+    How is it possible for the wait time per operation to go up faster (or higher) than the completion time per operation?
+        Wait time per operation is less concerned with individual times for acquiring locks, and
+        is more appropriate in the scope of general program.
+
+QUESTION 2.3.4 - Performance of Partitioned Lists
+    Explain the change in performance of the synchronized methods as a function of the number of lists.
+        Performance of sync methods exhibits better performance as a function of the number of lists.
+        Having multiple lists enables more parallelism between different threads due to the decrease in
+        contention of locks. This has the potential to overcome the initial memory and computational overhead
+        of managing more locks.
+    Should the throughput continue increasing as the number of lists is further increased? If not, explain why not.
+        There will likely be a threshold at which the number of lists will not increase throughput,
+        likely due to the increased costs of managing many lists for list operations, even to the point where
+        there is no contention between locks.
+    It seems reasonable to suggest the throughput of an N-way partitioned list should be equivalent to the throughput of a single list with fewer (1/N) threads. Does this appear to be true in the above curves? If not, explain why not.
+        No, because there would be a greater level of parallelism exercised in the N way list,
+        as multiple threads can be working on different sections of the multilist,
+        whereas the single threaded approach has to work in serial order.

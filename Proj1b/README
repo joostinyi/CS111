@@ -1,0 +1,13 @@
+# NAME: Justin Yi
+# EMAIL: joostinyi00@gmail.com
+# ID: 905123893
+
+lab1b-client.c - contains the source code for the client side application intended to interact with
+                 the server through a socket to access a shell. Supports compression, port number,
+                 transmission logging.
+
+lab1b-server.c - contains the source code for the server side application intended to interact with
+                 the client through a socket to provide access a shell. Supports compression and specific
+                 port number designation.
+
+Makefile - supports targets to build the client, server, distribution for submission, and cleaning

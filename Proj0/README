@@ -1,0 +1,22 @@
+NAME: Justin Yi
+EMAIL: joostinyi00@gmail.com
+ID: 905123893
+
+smoke-test cases:
+    The first test checks that the correct error for 
+    bad input argument is raised. The second test changes the order
+    of arguments to check the action ordering.
+    The third test checks for successful segfault catching functionality
+    The last test pulls from the sanity check to test normal use case functionality as well
+    as bad input arguments
+
+Many of the solutions in the lab0.c file were arranged from materials
+from discussion section 6/26/20.
+Linux man pages were utilized for functionality of various commands, I used the pread command
+to check for cases in which the input was not readable, while maintaining the offset
+for potential read and writes.
+While I initially referred to the piazza discussion for my implementation of write,
+I had difficulty dealing with a static buffer size, which seemed to change the size of
+the outputted files from the write, I opted instead to use a buffersize of 1 byte, which would
+be a fine enough granularity to help regulate this. 
+I added a test.sh script to my submission to handle my testing 
