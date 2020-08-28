@@ -1,0 +1,10 @@
+NAME: Justin Yi
+EMAIL: joostinyi00@gmail.com
+ID: 905123893
+
+lab3b.py: source code for the program, supporting a single csv file
+          to run file system audit upon
+
+Makefile: Makefile with supported targets of an aesthetic build,
+          distribution, and clean process
+        
