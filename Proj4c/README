@@ -1,0 +1,13 @@
+NAME: Justin Yi
+EMAIL: joostinyi00@gmail.com
+ID: 905123893
+
+lab4c_tcp.c: Source code containing embedded system reporting to
+             to server through TCP 
+
+lab4c_tls.c: Source code containing embedded system reporting to 
+             to server with encryption (SSL/TLS)
+
+Makefile: Makefile supporting default build, distribution, and clean targets
+
+compile.sh: Compilation script to aid in detection of beaglebone environment
